@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Halcyon</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="LiquidGlass MX のサンプルサイト。架空の環境音アプリ Halcyon のホームページ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../dist/liquidglass.css">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body data-lg-backdrop="#scene">
+
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<header class="nav-wrap">
+  <nav class="lg lg-nav site-nav" aria-label="メイン">
+    <a class="brand" href="#top" aria-label="Halcyon トップへ">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><circle cx="16" cy="16" r="5" fill="currentColor"/><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"/><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"/></svg>
+      <span>Halcyon</span>
+    </a>
+    <div class="nav-links">
+      <a href="#mixer">ミキサー</a>
+      <a href="#features">特徴</a>
+      <a href="#physics">ガラスの物理</a>
+      <a href="#pricing">料金</a>
+    </div>
+    <button class="lg lg-btn lg-btn--icon" id="theme-toggle" type="button" aria-label="ライト/ダーク切り替え">
+      <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z" fill="currentColor"/></svg>
+    </button>
+    <a class="lg lg-btn lg-btn--primary nav-cta" href="#beta">ベータ版</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero ------------------------------------------------------------ -->
+  <section class="hero band" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">環境音とフォーカスのためのアプリ</p>
+        <h1 id="hero-title">静けさを、<br>調律する。</h1>
+        <p class="lede">葉山の潮だまり、屋久島の沢、京都の町家に降る雨。48&nbsp;kHz で録った自然の音を、あなたの部屋の広さに合わせて重ねます。</p>
+        <div class="hero-actions">
+          <a class="lg lg-btn lg-btn--primary btn-lg" href="#beta">ベータ版に登録</a>
+          <a class="lg lg-btn btn-lg" href="#mixer">ミキサーを試す</a>
+        </div>
+        <ul class="hero-stats" aria-label="収録データ">
+          <li><b>312</b><span>収録トラック</span></li>
+          <li><b>48&nbsp;kHz</b><span>24-bit 録音</span></li>
+          <li><b>−23</b><span>LUFS で統一</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-stage">
+        <article class="lg lg-panel player" aria-label="再生中">
+          <div class="player-head">
+            <canvas class="art" id="art" width="128" height="128" aria-hidden="true"></canvas>
+            <div class="player-meta">
+              <p class="kicker">再生中</p>
+              <h2 class="track">潮だまりの午後</h2>
+              <p class="artist">Field Recording · 葉山・森戸海岸</p>
+            </div>
+          </div>
+          <div class="lg-slider progress" id="progress">
+            <input type="range" id="progress-input" min="0" max="2700" value="724" aria-label="再生位置">
+            <span class="lg-slider__track"></span>
+            <span class="lg lg-slider__thumb"></span>
+          </div>
+          <div class="times"><span id="t-now">12:04</span><span>45:00</span></div>
+          <div class="controls">
+            <button class="lg lg-btn lg-btn--icon" type="button" aria-label="前のトラック">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 5h2v14H6zM19 5v14L9 12z" fill="currentColor"/></svg>
+            </button>
+            <button class="lg lg-btn lg-btn--icon lg-btn--primary play" id="play" type="button" aria-label="再生" aria-pressed="false">
+              <svg class="i-play" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+            </button>
+            <button class="lg lg-btn lg-btn--icon" type="button" aria-label="次のトラック">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M16 5h2v14h-2zM5 5v14l10-7z" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="chips">
+            <span class="lg lg-chip">48 kHz / 24-bit</span>
+            <span class="lg lg-chip">空間オーディオ</span>
+            <span class="lg lg-chip">ループ 45:00</span>
+          </div>
+        </article>
+
+        <div class="lg lens" id="lens" data-lg-draggable=".hero" tabindex="0" role="img" aria-label="ドラッグできるガラスレンズ。矢印キーでも動かせます"></div>
+        <p class="lens-hint" aria-hidden="true">← レンズをドラッグ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mixer ----------------------------------------------------------- -->
+  <section class="band" id="mixer" aria-labelledby="mixer-title">
+    <div class="wrap split">
+      <div class="section-copy">
+        <p class="eyebrow">ミキサー</p>
+        <h2 id="mixer-title" class="h2">五つの音を、<br>好きな比率で。</h2>
+        <p>モードを選ぶと、音量バランスが目的に合わせて切り替わります。各トラックはスイッチで止められ、スライダーで細かく調整できます。</p>
+        <p class="note">表示は試聴用のデモです。実際の音は再生されません。</p>
+      </div>
+
+      <div class="lg lg-panel mixer">
+        <div class="lg lg-segmented" role="tablist" aria-label="ミックスのモード" id="mode">
+          <span class="lg lg-segmented__thumb" aria-hidden="true"></span>
+          <button class="lg-segmented__item" role="tab" aria-selected="true" data-value="focus">集中</button>
+          <button class="lg-segmented__item" role="tab" aria-selected="false" data-value="rest">休息</button>
+          <button class="lg-segmented__item" role="tab" aria-selected="false" data-value="sleep">睡眠</button>
+        </div>
+        <ul class="channels" id="channels"></ul>
+        <div class="mixer-foot">
+          <span>出力</span>
+          <output id="master" class="mono">−23.0 LUFS</output>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -------------------------------------------------------- -->
+  <section class="band" id="features" aria-labelledby="features-title">
+    <div class="wrap">
+      <p class="eyebrow">特徴</p>
+      <h2 id="features-title" class="h2">耳が疲れない理由。</h2>
+      <div class="feature-grid">
+        <article class="lg lg-card feature">
+          <p class="metric mono">−23 LUFS</p>
+          <h3>音量のばらつきがない</h3>
+          <p>全トラックを放送基準のラウドネスにそろえています。曲が変わっても、音量を触り直す必要はありません。</p>
+        </article>
+        <article class="lg lg-card feature">
+          <p class="metric mono">8.0 秒</p>
+          <h3>継ぎ目のないループ</h3>
+          <p>波の周期に合わせてクロスフェードの位置を決めています。45 分のループでも、どこで戻ったか気づきません。</p>
+        </article>
+        <article class="lg lg-card feature">
+          <p class="metric mono">0.4 GB</p>
+          <h3>オフラインで使える</h3>
+          <p>よく使う 20 トラックを端末に保存します。機内モードでも、山小屋でも、そのまま再生できます。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Physics playground ---------------------------------------------- -->
+  <section class="band" id="physics" aria-labelledby="physics-title">
+    <div class="wrap">
+      <p class="eyebrow">ガラスの物理</p>
+      <h2 id="physics-title" class="h2">このサイトのガラスは、<br>光を本当に曲げています。</h2>
+      <p class="section-lede">UI は LiquidGlass MX で描いています。曲面の形から屈折角をスネルの法則で求め、背景をずらして表示します。下のガラスはドラッグでき、右のパネルで厚みや屈折率を変えられます。</p>
+
+      <div class="playground">
+        <div class="pg-stage" id="pg-stage">
+          <canvas id="pg-canvas" aria-hidden="true"></canvas>
+          <div class="lg pg-sample" id="pg-sample" data-lg-backdrop="#pg-canvas" data-lg-draggable="#pg-stage" tabindex="0" role="img" aria-label="パラメーターを試すためのガラス。ドラッグか矢印キーで動かせます"></div>
+        </div>
+
+        <form class="lg lg-panel pg-controls" id="pg-form" aria-label="ガラスのパラメーター">
+          <div class="pg-row">
+            <label for="pg-thickness">厚み</label><output for="pg-thickness" class="mono" id="o-thickness"></output>
+            <div class="lg-slider"><input type="range" id="pg-thickness" min="0" max="90" step="1" value="40"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-row">
+            <label for="pg-bezel">ベゼル幅</label><output for="pg-bezel" class="mono" id="o-bezel"></output>
+            <div class="lg-slider"><input type="range" id="pg-bezel" min="4" max="75" step="1" value="44"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-row">
+            <label for="pg-ior">屈折率</label><output for="pg-ior" class="mono" id="o-ior"></output>
+            <div class="lg-slider"><input type="range" id="pg-ior" min="1" max="2.4" step="0.01" value="1.5"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-row">
+            <label for="pg-blur">ぼかし</label><output for="pg-blur" class="mono" id="o-blur"></output>
+            <div class="lg-slider"><input type="range" id="pg-blur" min="0" max="12" step="0.1" value="0.6"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-row">
+            <label for="pg-aberration">色収差</label><output for="pg-aberration" class="mono" id="o-aberration"></output>
+            <div class="lg-slider"><input type="range" id="pg-aberration" min="0" max="0.4" step="0.01" value="0.1"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-row">
+            <label for="pg-specular">ハイライト</label><output for="pg-specular" class="mono" id="o-specular"></output>
+            <div class="lg-slider"><input type="range" id="pg-specular" min="0" max="1.5" step="0.05" value="0.8"><span class="lg-slider__track"></span><span class="lg lg-slider__thumb"></span></div>
+          </div>
+          <div class="pg-profile">
+            <span class="pg-label" id="profile-label">断面の形</span>
+            <div class="lg lg-segmented" role="tablist" aria-labelledby="profile-label" id="pg-profile">
+              <span class="lg lg-segmented__thumb" aria-hidden="true"></span>
+              <button type="button" class="lg-segmented__item" role="tab" aria-selected="true" data-value="squircle">スクワクル</button>
+              <button type="button" class="lg-segmented__item" role="tab" aria-selected="false" data-value="circle">円弧</button>
+              <button type="button" class="lg-segmented__item" role="tab" aria-selected="false" data-value="parabolic">放物線</button>
+            </div>
+          </div>
+          <div class="pg-status">
+            <p><span class="pg-label">このブラウザの描画方式</span><b id="mode-name" class="mono">—</b></p>
+            <p id="mode-desc" class="mode-desc"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing --------------------------------------------------------- -->
+  <section class="band" id="pricing" aria-labelledby="pricing-title">
+    <div class="wrap">
+      <p class="eyebrow">料金</p>
+      <h2 id="pricing-title" class="h2">月額 480 円から。</h2>
+      <div class="lg lg-segmented billing" role="tablist" aria-label="支払い周期" id="billing">
+        <span class="lg lg-segmented__thumb" aria-hidden="true"></span>
+        <button class="lg-segmented__item" role="tab" aria-selected="true" data-value="month">月払い</button>
+        <button class="lg-segmented__item" role="tab" aria-selected="false" data-value="year">年払い −20%</button>
+      </div>
+      <div class="price-grid">
+        <article class="lg lg-card price">
+          <h3>Free</h3>
+          <p class="amount"><b>¥0</b></p>
+          <ul>
+            <li>12 トラック</li>
+            <li>同時再生 2 チャンネル</li>
+            <li>30 分のタイマー</li>
+          </ul>
+          <a class="lg lg-btn" href="#beta">無料で始める</a>
+        </article>
+        <article class="lg lg-card price featured">
+          <p class="badge">いちばん人気</p>
+          <h3>Plus</h3>
+          <p class="amount"><b data-month="¥480" data-year="¥384">¥480</b><span>/ 月</span></p>
+          <ul>
+            <li>312 トラックすべて</li>
+            <li>同時再生 5 チャンネル</li>
+            <li>オフライン保存 20 トラック</li>
+            <li>空間オーディオ</li>
+          </ul>
+          <a class="lg lg-btn lg-btn--primary" href="#beta">Plus を選ぶ</a>
+        </article>
+        <article class="lg lg-card price">
+          <h3>Family</h3>
+          <p class="amount"><b data-month="¥780" data-year="¥624">¥780</b><span>/ 月</span></p>
+          <ul>
+            <li>Plus の内容を 6 人まで</li>
+            <li>子ども向けおやすみタイマー</li>
+            <li>共有プレイリスト</li>
+          </ul>
+          <a class="lg lg-btn" href="#beta">Family を選ぶ</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beta ------------------------------------------------------------ -->
+  <section class="band" id="beta" aria-labelledby="beta-title">
+    <div class="wrap">
+      <div class="lg lg-panel beta">
+        <div>
+          <h2 id="beta-title" class="h2">ベータ版の案内を受け取る</h2>
+          <p>iOS / Android / macOS 版のテスト配布が始まったら、メールでお知らせします。</p>
+        </div>
+        <form class="beta-form" id="beta-form" novalidate>
+          <label class="lg lg-field" for="beta-email">
+            <span class="sr-only">メールアドレス</span>
+            <input id="beta-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+            <button class="lg lg-btn lg-btn--primary" type="submit">登録</button>
+          </label>
+          <p class="form-msg" id="form-msg" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="band footer">
+  <div class="wrap footer-inner">
+    <p>Halcyon は LiquidGlass MX のデモ用に作った架空のサービスです。</p>
+    <label class="lg-switch" for="motion-toggle">
+      <input type="checkbox" id="motion-toggle" checked>
+      <span class="lg-switch__track"><span class="lg lg-switch__knob"></span></span>
+      <span>背景をゆっくり動かす</span>
+    </label>
+  </div>
+</footer>
+
+<script src="../dist/liquidglass.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>

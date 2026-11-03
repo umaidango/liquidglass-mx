@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiquidGlass MX — minimal</title>
+<link rel="stylesheet" href="../dist/liquidglass.css">
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; font: 16px/1.6 system-ui, sans-serif; }
+  /* 背景: mirror 経路（Safari / Firefox）で屈折させたいので canvas に描く */
+  #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; }
+  .card { width: min(360px, 90vw); }
+  .row { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<!-- data-lg-backdrop: WebGL 経路で屈折させる背景（Chromium では不要だが付けておくと全ブラウザで屈折する） -->
+<body data-lg-backdrop="#bg">
+  <canvas id="bg"></canvas>
+
+  <div class="lg lg-card card">
+    <h1 style="margin:0">Liquid Glass</h1>
+    <p>class="lg" を付けるだけで、背景を屈折させるガラスになります。</p>
+    <div class="row">
+      <button class="lg lg-btn lg-btn--primary">保存</button>
+      <button class="lg lg-btn">キャンセル</button>
+      <label class="lg-switch"><input type="checkbox" checked><span class="lg-switch__track"><span class="lg lg-switch__knob"></span></span>通知</label>
+    </div>
+  </div>
+
+  <!-- 厚み・屈折率などは data 属性か CSS 変数で指定 -->
+  <div class="lg" data-lg-thickness="60" data-lg-blur="0" data-lg-profile="circle" data-lg-draggable
+       style="position:fixed; left:40px; top:40px; width:150px; height:150px; border-radius:50%; --lg-tint:transparent"></div>
+
+<script>
+  var c = document.getElementById('bg'), x = c.getContext('2d');
+  function paint() {
+    c.width = innerWidth; c.height = innerHeight;
+    for (var i = 0; i * 28 < c.width + c.height; i++) {
+      x.fillStyle = ['#ff9f43', '#54a0ff', '#5f27cd', '#1dd1a1'][i % 4];
+      x.beginPath(); x.moveTo(i * 28, 0); x.lineTo(i * 28 + 14, 0); x.lineTo(i * 28 + 14 - c.height, c.height); x.lineTo(i * 28 - c.height, c.height); x.fill();
+    }
+    if (window.LiquidGlass) LiquidGlass.invalidateBackdrop(c);
+  }
+  paint(); addEventListener('resize', paint);
+</script>
+<script src="../dist/liquidglass.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "liquidglass-mx",
+  "version": "1.0.0",
+  "description": "Physically based liquid glass (refraction, dispersion, specular) for the web. SVG displacement on Chromium, WebGL on Safari/Firefox, frosted fallback everywhere else.",
+  "main": "dist/liquidglass.js",
+  "style": "dist/liquidglass.css",
+  "files": ["dist"],
+  "scripts": {
+    "test": "node --test test/optics.test.mjs",
+    "test:e2e": "node test/e2e.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": ["liquid-glass", "glassmorphism", "refraction", "backdrop-filter", "webgl", "svg-filter"]
+}
